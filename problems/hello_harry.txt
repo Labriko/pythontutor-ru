@@ -1,0 +1,23 @@
+Name:
+Hello, Harry!
+
+Statement:
+Напишите программу, которая приветствует пользователя, выводя слово <code>Hello</code>, введенное имя и знаки препинания по образцу:
+
+Test:
+Harry
+
+Answer:
+Hello, Harry!
+
+Test:
+Mr. Potter
+
+Answer:
+Hello, Mr. Potter!
+
+Test:
+Lord Voldemort
+
+Answer:
+Hello, Lord Voldemort!

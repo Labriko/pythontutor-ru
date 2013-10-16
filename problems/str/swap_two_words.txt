@@ -1,0 +1,44 @@
+Name:
+Переставить два слова
+
+Statement:
+<p>Дана строка, состоящая ровно из двух слов, разделенных пробелом. Переставьте эти слова
+местами. Результат запишите в строку и выведите получившуюся строку.
+
+<p>При решении этой задачи не стоит пользоваться циклами и инструкцией <code>if</code>.
+
+Test:
+Hello, world!
+
+Answer:
+world! Hello,
+
+
+Test:
+A B
+
+Answer:
+B A
+
+
+Test:
+Q WERRTYUIOP
+
+Answer:
+WERRTYUIOP Q
+
+
+Test:
+QWERTYUIOP M
+
+Answer:
+M QWERTYUIOP
+
+
+Test:
+sadfahsjkldfhasjkdfhaklsjdfhjkl asdlkfhasdjklfhaslkdfjhalskdfgalsdf
+
+Answer:
+asdlkfhasdjklfhaslkdfjhalskdfgalsdf sadfahsjkldfhasjkdfhaklsjdfhjkl
+
+

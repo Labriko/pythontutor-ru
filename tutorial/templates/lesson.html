@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load tags %}
+
+{% block body %}
+
+<h2>Занятие {{ lesson_in_course.order }}. {{ lesson.title }}</h2>
+{{ lesson_content|safe }}
+
+{% if problems %}
+<p><h3>Задачи:</h3>
+    {% for problem in problems %}
+        <p style="padding-left: 10pt;">
+        <a href="{% url courses %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/problems/{{ problem.urlname }}/">
+            {% problem_link problem %}</a>
+        {% ideal_solution problem %}
+        </p>
+    {% endfor %}
+</p>
+<p>
+<a href="{% url courses %}{{ course.urlname }}/lessons/{{ lesson.urlname }}/standings/"><h3>Таблица результатов</h3></a>
+</p>
+{% endif %}
+
+{% if lesson.external_contest_link %}<a href="{{ lesson.external_contest_link }}"><h3>Внешний контест с задачами</h3></a>{% endif %}
+
+{% endblock %}

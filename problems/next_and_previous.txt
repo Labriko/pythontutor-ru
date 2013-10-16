@@ -1,0 +1,26 @@
+Name:
+Следующее и предыдущее
+
+Statement:
+Напишите программу, которая считывает целое число и выводит текст, аналогичный приведенному в примере (пробелы важны!).
+
+Test:
+1534
+
+Answer:
+The next number for the number 1534 is 1535.
+The previous number for the number 1534 is 1533.
+
+Test:
+0
+
+Answer:
+The next number for the number 0 is 1.
+The previous number for the number 0 is -1.
+
+Test:
+2718281828904590
+
+Answer:
+The next number for the number 2718281828904590 is 2718281828904591.
+The previous number for the number 2718281828904590 is 2718281828904589.

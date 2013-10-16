@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block headers %}
+
+
+<!-- load these local files only when localTesting == true 
+
+<script type="text/javascript" src="mock-data.js"></script> 
+
+-->
+
+<script type="text/javascript" src="{{ STATIC_URL }}jquery.ba-bbq.min.js"></script>
+
+<!-- disable autogrow for simplicity
+  <script type="text/javascript" src="jquery.autogrow.js"></script>
+ -->
+
+<!-- jsPlumb library for rendering connectors -->
+<script type="text/javascript" src="{{ STATIC_URL }}jquery.jsPlumb-1.3.3-all-min.js"></script>
+
+<!-- my own code -->
+<script type="text/javascript" src="{{ STATIC_URL }}edu-python.js" charset="utf-8"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}edu-python-visualizer.js" charset="utf-8"></script>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}edu-python.css"/>
+
+{% endblock %}
+
+{% block body %}
+
+<div id="pyInputPane">
+
+Введите здесь программу на языке Python:
+<br/>
+
+<textarea class="codeInputPane" id="pyInput" cols="55" rows="15" wrap="off" spellcheck="false"></textarea>
+<br/>
+<br/>
+
+Введите входные данные для программы:
+<br/>
+
+<textarea class="codeInputPane" id="inputData" cols="55" rows="8" wrap="off" spellcheck="false"></textarea>
+
+<p>
+
+<button id="executeBtn" class="bigBtn" type="button">Запустить программу</button>
+
+</p>
+
+<p style="margin-top: 25px;">Поиграйтесь с примерами различных программ:<br/>
+
+<a id="tutorialExampleLink" href="#">презентация языка</a> |
+<a id="aliasExampleLink" href="#">разные имена одного объекта</a> |
+<a id="factExampleLink" href="#">факториал</a>
+<br/>
+<a id="fibonacciExampleLink" href="#">fibonacci</a> |
+<a id="memoFibExampleLink" href="#">memoized fib</a> |
+<a id="newtonExampleLink" href="#">square root</a> |
+<a id="insSortExampleLink" href="#">insertion sort</a>
+<br/>
+<a id="filterExampleLink" href="#">filter</a> |
+<a id="strtokExampleLink" href="#">tokenize</a> |
+<a id="oopSmallExampleLink" href="#">OOP</a> |
+<a id="pwGcdLink" href="#">gcd</a> |
+<a id="pwSumListLink" href="#">sumList</a> |
+<a id="towersOfHanoiLink" href="#">towers of hanoi</a> |
+<a id="pwTryFinallyLink" href="#">exceptions</a>
+
+</p>
+
+<!--
+<p style="margin-top: 25px;">Examples from the MIT 
+<a href="http://mit.edu/6.01/">6.01</a> course:<br/>
+
+<a id="mapExampleLink" href="#">list map</a> |
+<a id="sumExampleLink" href="#">summation</a> |
+<a id="oop1ExampleLink" href="#">OOP 1</a> |
+<a id="oop2ExampleLink" href="#">OOP 2</a> |
+<a id="inheritanceExampleLink" href="#">inheritance</a>
+
+</p>
+
+<p style="margin-top: 25px;">
+Then try some sample programming questions:<br/>
+Solve:
+<a href="question.html?two-sum">Two-sum</a> |
+<a href="question.html?reverse">Reverse list</a> |
+<a href="question.html?remove-dups">Remove duplicate chars</a>
+
+<br/>Debug:
+<a href="question.html?debug-ireverse">In-place reverse</a> |
+<a href="question.html?debug-bsearch">Binary search</a> |
+<a href="question.html?debug-mergesort">Mergesort</a>
+
+<br/>Optimize:
+
+<a href="question.html?optimize-sum">Greatest sum</a> |
+<a href="question.html?optimize-find-dups">Find duplicates</a> |
+<a href="question.html?optimize-search">List search</a>
+
+</p>
+-->
+
+
+
+
+</div>
+
+
+<table border="0" id="pyOutputPane">
+<tr>
+<td valign="top">
+
+<center>
+
+<div id="pyCodeOutputDiv">
+
+Чтобы выполнять программу по шагам, используйте клавиши со стрелками <b>влево</b> и <b>вправо</b>:
+<table id="pyCodeOutput"></table>
+
+</div>
+
+<div id="editCodeLinkDiv">
+
+<button id="editBtn" class="medBtn" type="button">Изменить программу</button>
+
+</div>
+
+<div id="vcrControls">
+  <button id="jmpFirstInstr", type="button">&lt;&lt; В начало</button>
+  <button id="jmpStepBack", type="button">&lt; Шаг назад</button>
+  <span id="curInstr">Шаг ? из ?</span>
+  <button id="jmpStepFwd", type="button">Шаг вперёд &gt;</button>
+  <button id="jmpLastInstr", type="button">В конец &gt;&gt;</button>
+</div>
+
+<div id="errorOutput"></div>
+
+
+</center>
+
+<br>
+Вывод программы:
+<br/>
+<textarea id="pyStdout" cols="50" rows="8" wrap="off" readonly></textarea>
+
+<br/>
+<br/>
+Используемые входные данные:
+<br/>
+<textarea id="inputDataOnVisualizing" cols="50" rows="8" wrap="off" readonly></textarea>
+
+
+</td>
+<td valign="top">
+
+<div id="dataViz"></div>
+
+</td>
+</tr>
+</table>
+
+{% include 'vis_footer.html' %}
+
+{% endblock %}

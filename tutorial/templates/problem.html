@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block headers %}
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}hunt-mcilroy.js"></script>
+
+<script type="text/javascript" src="{{ STATIC_URL }}jquery.ba-bbq.min.js"></script>
+
+<!-- jsPlumb library for rendering connectors -->
+<script type="text/javascript" src="{{ STATIC_URL }}jquery.jsPlumb-1.3.3-all-min.js "></script>
+
+<!-- my own code -->
+<script type="text/javascript" src="{{ STATIC_URL }}edu-python.js" charset="utf-8"></script>
+<script type="text/javascript" src="{{ STATIC_URL }}edu-python-problem.js" charset="utf-8"></script>
+
+<link rel="stylesheet" href="{{ STATIC_URL }}edu-python.css" type="text/css"/>
+
+{% endblock %}
+
+{% block body %}
+
+<center>
+
+<div id="questionsHeaderPane">
+
+<div class="questionsHeaderTitle" id="ProblemName">Идёт загрузка задачи...</div>
+
+<div class="questionsHeaderStmt" id="ProblemStatement"></div>
+
+<!--
+<div class="questionsHeaderStmt" id="HintStatement"><a href="#" id="showHintHref">Show hint</a></div>
+<div class="questionsHeaderStmt" id="SolutionStatement"><a href="#" id="showSolutionHref">Show solution</a></div>
+-->
+
+</div>
+
+</center>
+
+
+<div id="pyInputPane">
+
+Введите здесь программу на языке Python:
+<br/>
+
+<textarea class="codeInputPane" id="actualCodeInput" cols="55" rows="15" wrap="off" spellcheck="false">
+</textarea>
+<br/>
+<br/>
+
+Введите входные данные для программы:
+<br/>
+
+<textarea class="codeInputPane" id="inputData" cols="55" rows="8" wrap="off" spellcheck="false"></textarea>
+
+<p>
+
+<button id="executeBtn" class="bigBtn" type="button">Запустить программу</button>
+
+</p>
+
+<!--
+<p/>Write your test code here:<br/>
+<textarea class="codeInputPane" id="testCodeInput" cols="60" rows="3" wrap="off">
+</textarea>
+-->
+
+</div>
+
+
+<table border="0" id="pyOutputPane">
+<tr>
+<td valign="top">
+
+<center>
+
+<div id="pyCodeOutputDiv">
+
+Чтобы выполнять программу по шагам, используйте клавиши со стрелками <b>влево</b> и <b>вправо</b>:
+<table id="pyCodeOutput"></table>
+
+</div>
+
+<div id="editCodeLinkDiv">
+
+<button id="editBtn" class="medBtn" type="button">Изменить программу</button>
+<span style="margin-left: 7px;"/>
+<button id="submitBtn" class="medBtn" type="button">Отправить решение на проверку</button>
+
+</div>
+
+<div id="vcrControls">
+  <button id="jmpFirstInstr", type="button">&lt;&lt; В начало</button>
+  <button id="jmpStepBack", type="button">&lt; Шаг назад</button>
+  <span id="curInstr">Шаг ? из ?</span>
+  <button id="jmpStepFwd", type="button">Шаг вперёд &gt;</button>
+  <button id="jmpLastInstr", type="button">В конец &gt;&gt;</button>
+</div>
+
+<div id="errorOutput"></div>
+
+
+</center>
+
+<br>
+Вывод программы:
+<br/>
+<textarea id="pyStdout" cols="50" rows="8" wrap="off" readonly></textarea>
+
+<br/>
+<br/>
+Используемые входные данные:
+<br/>
+<textarea id="inputDataOnVisualizing" cols="50" rows="8" wrap="off" readonly></textarea>
+
+</td>
+<td valign="top">
+
+<div id="dataViz"></div>
+
+</td>
+</tr>
+</table>
+
+
+<div id="pyGradingPane">
+
+
+<center>
+
+<div id="submittedSolutionDisplay">
+  <pre id="submittedCodePRE"></pre>
+  <div id="gradeSummary"></div>
+</div>
+
+<table id="gradeMatrix">
+<thead>
+<tr>
+<td>Входные данные</td>
+<td>Вывод программы</td>
+<td>Правильный ответ</td>
+<td class="statusCell">Результат</td>
+</tr>
+</thead>
+<tbody id="gradeMatrixTbody">
+</tbody>
+</table>
+
+</center>
+
+</div>
+
+{% include 'vis_footer.html' %}
+
+{% endblock %}

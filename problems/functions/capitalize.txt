@@ -1,0 +1,44 @@
+Name:
+Большие буквы
+
+Statement:
+Напишите функцию capitalize(), которая принимает слово из маленьких латинских букв и возвращает его же, меняя первую букву на большую. 
+
+<p>Например, print(capitalize('word')) должно печатать слово Word.
+
+<p>На вход подаётся строка, состоящая из слов, разделённых одним пробелом. Слова состоят из маленьких латинских букв. Напечатайте исходную строку, сделав так, чтобы каждое слово начиналось с большой буквы. При этом используйте вашу функцию capitalize().
+
+<p>Напомним, что в Питоне есть функция <code>ord()</code>, которая по символу возвращает его код <a href="http://ru.wikipedia.org/wiki/ASCII">в таблице ASCII</a>, и функция <code>chr()</code>, которая по коду символа возвращает сам символ. Например, <code>ord('a') == 97</code>, <code>chr(97) == 'a'</code>.
+
+Test:
+harry potter
+
+Answer:
+Harry Potter
+
+
+Test:
+procrastination
+
+Answer:
+Procrastination
+
+
+Test:
+not a hero unless you die
+
+Answer:
+Not A Hero Unless You Die
+
+
+Test:
+de noche todos los gatos son pardos
+
+Answer:
+De Noche Todos Los Gatos Son Pardos
+
+Test:
+i wanna taste you but your lips are venomous poison
+
+Answer:
+I Wanna Taste You But Your Lips Are Venomous Poison

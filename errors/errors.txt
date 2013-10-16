@@ -1,0 +1,352 @@
+// Регулярные выражения проверяются один за другим.
+// Первое подходящее выдаётся в качестве объяснения ошибки.
+//
+// Каждая запись должна заканчиваться разделом "Translation:"
+//
+// В регулярном выражении группы должны обязательно идти в порядке {0}, {1}, {2}, ...
+//
+Regexp:
+IndexError: list assignment index out of range
+
+Translation:
+Ошибка обращения по индексу: выход за границы списка
+
+Regexp:
+IndexError: list index out of range
+
+Translation:
+Ошибка обращения по индексу: выход за границы списка
+
+Regexp:
+IndexError: string index out of range
+
+Translation:
+Ошибка обращения по индексу: выход за границы строки
+
+Regexp:
+EOFError: EOF when reading a line
+
+Translation:
+Ошибка ввода-вывода: попытка считать из входных данных,
+которые уже закончились.
+
+Regexp:
+TypeError: not all arguments converted during string formatting
+
+Translation:
+Не все аргументы попали в строку форматирования.
+Возможно, вы делите строку на число с остатком 
+(а надо делить число на число).
+
+Regexp:
+Error: expected an indented block
+
+Translation:
+Ошибка: ожидается блок кода с отступом
+
+Regexp:
+Error: unexpected indent
+
+Translation:
+Ошибка: внезапно возник блок кода с отступом
+
+Regexp:
+TypeError: {0}() takes exactly 1 argument ({1} given)
+
+Translation:
+Функция {0}() принимает ровно 1 аргумент,
+а ей передали {1}
+
+Regexp:
+TypeError: {0}() takes exactly {1} arguments ({2} given)
+
+Translation:
+Функция {0}() принимает ровно {1} аргумента,
+а ей передали {2}
+
+Regexp:
+TypeError: {0}() takes no arguments ({1} given)
+
+Translation:
+Функция {0}() не принимает аргументов, 
+а ей передали {1}
+
+Regexp:
+NameError: name '{0}' is not defined
+
+Translation:
+Ошибка разрешения имени: имя '{0}' не связано ни с каким объектом
+
+Regexp:
+TypeError: coercing to Unicode: need string or buffer, int found
+
+Translation:
+Ошибка типов: нельзя прибавить число к строке
+Попробуйте сначала преобразовать его к строке так: str(42)
+
+Regexp:
+TypeError: cannot concatenate 'str' and 'int' objects
+
+Translation:
+Ошибка типов: нельзя прибавить число к строке
+Попробуйте сначала преобразовать его к строке так: str(42)
+
+Regexp:
+TypeError: unsupported operand type(s) for +: 'int' and 'unicode'
+
+Translation:
+Ошибка типов: нельзя сложить число и строку
+Вам нужно либо перевести число в строку через str(42),
+либо строку в число через int('42')
+
+Regexp:
+TypeError: cannot concatenate 'int' and 'str' objects
+
+Translation:
+Ошибка типов: нельзя сложить число и строку
+Вам нужно либо перевести число в строку через str(42),
+либо строку в число через int('42')
+
+Regexp:
+TypeError: cannot concatenate 'str' and '{0}' objects
+
+Translation:
+Ошибка типов: нельзя прибавить к строке объект типа '{0}'
+Попробуйте сначала преобразовать его к строке через str(...)
+
+Regexp:
+TypeError: unsupported operand type(s) for {0}: '{1}' and '{2}'
+
+Translation:
+Ошибка типов: невозможно выполнить операцию '{0}'
+с объектами типов '{1}' и '{2}'
+
+Regexp:
+TypeError: an integer is required
+
+Translation:
+Ошибка типов: требуется передать число
+Так бывает, когда вы случайно написали <code>range(my_list)</code>
+вместо <code>range(len(my_list))</code>
+
+Regexp:
+TypeError: 'str' object does not support item assignment
+
+Translation:
+Строки в Python неизменяемы. 
+Нельзя присвоить что-нибудь отдельному символу строки. 
+Чтобы изменить символ, используйте срезы:
+<code>text = text[:4] + '$' + text[5:]</code>
+
+Regexp:
+TypeError: '{0}' object does not support item assignment
+
+Translation:
+Нельзя присвоить что-нибудь элементу в объекте типа '{0}'
+
+Regexp:
+Error: EOL while scanning string literal
+
+Translation:
+Перевод строки обнаружен раньше, чем закончилась строковая константа
+Наверно, вы забыли закрыть кавычку
+
+Regexp:
+Error: invalid syntax
+
+LineDetector:
+def detect_error(error_msg, code_line):
+    return code_line.count('(') != code_line.count(')')
+
+Translation:
+Ошибка: неправильный синтаксис
+Количество открывающихся скобок не равно количеству закрывающихся
+
+Regexp:
+Error: invalid syntax
+
+LineDetector:
+def detect_error(error_msg, code_line):
+    return ':=' in code_line
+
+Translation:
+Ошибка: неправильный синтаксис
+В Питоне ":=" не является оператором присваивания
+Неверно: variable := 42
+Правильно: variable = 42
+
+Regexp:
+Error: invalid syntax
+
+LineDetector:
+def detect_error(error_msg, code_line):
+    tokens = code_line.split()
+    return tokens and tokens[0] in ['for', 'while', 'if', 'else', 'elif'] and code_line.rstrip()[-1] != ':'
+
+Translation:
+Ошибка: неправильный синтаксис
+В конце строки пропущено двоеточие
+
+Regexp:
+Error: invalid syntax
+
+LineDetector:
+def detect_error(error_msg, code_line):
+    from re import search
+    tokens = code_line.split()
+    return tokens and tokens[0] in ['while', 'if', 'elif'] and search(r'[^=]=[^=]', code_line)
+
+Translation:
+Ошибка: неправильный синтаксис
+Похоже, надо заменить '=' на '=='
+
+Regexp:
+Error: invalid syntax
+
+LineDetector:
+def detect_error(error_msg, code_line):
+    from re import search
+    tokens = code_line.split()
+    return tokens and tokens[0].startswith('elif') and (':' in tokens[0] or len(tokens) <= 2)
+
+Translation:
+Ошибка: неправильный синтаксис
+elif используется только вместе с каким-нибудь условием.
+Замените на "elif условие:" или на "else:"
+
+Regexp:
+Error: invalid syntax
+
+Translation:
+Ошибка: неправильный синтаксис.
+Все ли открытые скобки в вашем коде закрыты?
+Не использовали ли вы ':=' как оператор присваивания?
+Может быть, вы не поставили двоеточее в конце строки с if, for или while?
+Или же в условии при сравнении на равенства поставили '=' вместо '=='.
+
+Regexp:
+ZeroDivisionError: integer division or modulo by zero
+
+Translation:
+Деление на ноль
+
+Regexp:
+ZeroDivisionError: float division by zero
+
+Translation:
+Деление на ноль
+
+Regexp:
+TypeError: '{0}' object is not iterable
+
+Translation:
+Возможно, вы использовали for i in 5
+вместо for i in range(5)
+
+Regexp:
+TypeError: string indices must be integers
+
+Translation:
+Возможно, вы написали s[2,5] вместо s[2:5].
+В срезах аргументы разделяются двоеточиями.
+
+Regexp:
+TypeError: string indices must be integers
+
+Translation:
+Индексы строки должны быть числами
+
+Regexp:
+TypeError: slice indices must be integers or None or have an __index__ method
+
+Translation:
+Параметры среза должны быть числами
+
+Regexp:
+Stopped after {0} steps to prevent possible infinite loop
+
+Translation:
+Программа остановлена после {0} шагов.
+Ваша программа совершает слишком много действий
+или вошла в вечный цикл.
+
+Regexp:
+TypeError: can't multiply sequence by non-int of type '{0}'
+
+Translation:
+Невозможно умножить строку на что-то, не являющееся целым числом,
+а имеющее тип '{0}'.
+
+Regexp:
+TypeError: '{0}' object has no attribute '__getitem__'
+
+Translation:
+Недопустимо брать индекс у объекта типа '{0}'.
+Возможно, вы написали квадратные скобки вместо круглых.
+
+Regexp:
+TypeError: a float is required
+
+Translation:
+Требуется передать вещественное число в функцию.
+Не передаёте ли вы строку вместо числа?
+
+Regexp:
+TypeError: list indices must be integers, not {0}
+
+Translations:
+Индексы в списке должны быть целыми числами, а не объектами типа {0}
+
+Regexp:
+TypeError: sequence item 0: expected string or Unicode, {0} found
+
+Translation:
+В параметр join передан список не из строк, а из объектов типа '{0}'.
+Как обойти проблему: ' '.join([str(i) for i in my_list]
+
+Regexp:
+UnboundLocalError: local variable {0} referenced before assignment
+
+Translation:
+Попытка взять значение локальной переменной {0}, 
+которая не была проинициализирована
+
+Regexp:
+ValueError: invalid literal for int() with base 10: {0}
+
+Translation:
+Нельзя перевести строку {0} в целое число
+
+Regexp:
+TypeError: {0} object is not subscriptable
+
+Translation:
+Недопустимо брать индекс у объекта типа {0}.
+Возможно, вы написали квадратные скобки вместо круглых.
+
+Regexp:
+Error: unindent does not match any outer indentation level
+
+Translation:
+В вашей программе всё очень плохо с отступами.
+
+Regexp:
+ValueError: need more than {0} values to unpack
+
+Translation:
+Неправильное множественное присваивание:
+справа стоит {0} объекта, а слева переменных больше.
+
+Regexp:
+ValueError: need more than {0} values to unpack
+
+Translation:
+Неправильное множественное присваивание:
+справа стоит {0} объект, а слева переменных больше.
+
+Regexp:
+ValueError: too many values to unpack
+
+Translation:
+Неправильное множественное присваивание:
+справа стоит больше объектов, чем слева переменных.

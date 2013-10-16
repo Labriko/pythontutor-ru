@@ -1,0 +1,38 @@
+Name:
+Знак числа
+
+Statement:
+В математике функция <code>sign(x)</code> (знак числа) определена так: 
+<br>
+<code>sign(x) = 1,   если x > 0, 
+<br>
+sign(x) = -1, если x < 0, 
+<br>
+sign(x) = 0,   если x = 0.</code>
+<p>
+Для данного числа x выведите значение <code>sign(x)</code>.
+Эту задачу желательно решить с использованием каскадных инструкций <code>if... elif... else</code>.
+
+Test:
+1534
+
+Answer:
+1
+
+Test:
+-42
+
+Answer:
+-1
+
+Test:
+0
+
+Answer:
+0
+
+Test:
+179
+
+Answer:
+1

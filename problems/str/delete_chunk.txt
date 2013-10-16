@@ -1,0 +1,57 @@
+Name:
+Удаление фрагмента
+
+Statement:
+<p>Дана строка, в которой буква <code>h</code> встречается минимум два раза.
+Удалите из этой строки первое и последнее вхождение буквы <code>h</code>,
+а также все символы, находящиеся между ними.
+
+Test:
+In the hole in the ground there lived a hobbit
+
+Answer:
+In tobbit
+
+
+Test:
+qwertyhasdfghzxcvb
+
+Answer:
+qwertyzxcvb
+
+
+Test:
+asdfghhzxcvb
+
+Answer:
+asdfgzxcvb
+
+
+Test:
+ahahahahaha
+
+Answer:
+aa
+
+
+Test:
+haaaaaaaaaaaaaaaaaah
+
+Answer:
+
+
+
+Test:
+hh
+
+Answer:
+
+
+
+Test:
+ahaha
+
+Answer:
+aa
+
+

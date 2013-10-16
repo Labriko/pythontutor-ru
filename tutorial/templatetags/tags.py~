@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+
+from django import template
+from pylernu.tutorial.models import Problem, Submission
+from pylernu.tutorial.load_problems import load_problem
+
+import urllib
+
+register = template.Library()
+
+
+class ProgramCodeNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        code = self.nodelist.render(context).strip()
+        input_data = context.get("input_data", " ")
+        print context
+        print context.get('navigation')['course'].urlname
+        print context.get('navigation')['lesson'].urlname
+        if context.get("navigation", None):
+            visualizer_link = template.Template(r"{% url visualizer_for_lesson " + "'{0}' '{1}'".\
+                format(context.get('navigation')['course'].urlname, context.get('navigation')['lesson'].urlname) + " %}").render(context)
+        else:
+            visualizer_link = template.Template("r{% url visualizer %}").render(context)
+        return u'''<blockquote>
+    <pre class="prettyprint">{0}</pre>
+    <a href="{1}?code={2}&input={3}">Показать код в визуализаторе</a>
+</blockquote>'''.format(code, visualizer_link, urllib.quote(code.encode('utf-8'), ''), urllib.quote(input_data.encode('utf-8'), ''))
+
+
+@register.tag('program')
+def highlight_program_code(parser, token):
+    nodelist = parser.parse(('endprogram',))
+    parser.delete_first_token()
+    return ProgramCodeNode(nodelist)
+
+
+class InputDataNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        input_data = self.nodelist.render(context).strip()
+        context["input_data"] = input_data
+        return u''
+
+
+@register.tag('inputdata')
+def add_input_data(parser, token):
+    nodelist = parser.parse(('endinputdata',))
+    parser.delete_first_token()
+    return InputDataNode(nodelist)
+
+
+class ProblemLinkNode(template.Node):
+    def __init__(self, problem_ref):
+        self.problem_ref = problem_ref
+
+    def render(self, context):
+        problem_urlname = context[self.problem_ref]['urlname']
+        problem = load_problem(Problem.objects.get(urlname=problem_urlname))
+        user = context['request'].user
+        if user.is_authenticated():
+            statuses = [submission.get_status_display() for submission 
+                    in Submission.objects.filter(user=user, problem=problem['db_object'])]
+        else:
+            statuses = []
+        if 'ok' in statuses:
+            css_class = 'okProblemLink'
+        elif 'error' in statuses:
+            css_class = 'errorProblemLink'
+        else:
+            css_class = 'unsubmittedProblemLink'
+        return u'<span class="{0}">{1}</span>'.format(css_class, problem['name'])
+
+
+@register.tag('problem_link')
+def get_problem_link(parser, token):
+    try:
+        tag_name, problem_ref = token.split_contents()
+    except ValueError:
+        msg = '{0} tag requires a single argument'.format(token.split_contents()[0])
+        raise template.TemplateSyntaxError(msg)
+    return ProblemLinkNode(problem_ref)
+
+
+
+class WrapperNode(template.Node):
+    def __init__(self, nodelist, html_before, html_after):
+        self.nodelist = nodelist
+        self.html_before = html_before
+        self.html_after = html_after
+
+    def render(self, context):
+        return (unicode(self.html_before) + 
+                self.nodelist.render(context) + 
+                unicode(self.html_after))
+
+
+def create_wrapper_tag(name, html_before, html_after):
+    @register.tag(name)
+    def wrapper_tag_func(parser, token):
+        nodelist = parser.parse(('end' + name,))
+        parser.delete_first_token()
+        return WrapperNode(nodelist, html_before, html_after)   
+
+
+def create_parameterized_wrapper_tag(name, html_before, html_after):
+    @register.tag(name)
+    def wrapper_tag_func(parser, token):
+        token_name, *params = token.split_contents()
+        nodelist = parser.parse(('end' + name,))
+        parser.delete_first_token()
+        return WrapperNode(nodelist, html_before.format(*params), html_after)   
+
+
+create_wrapper_tag('input', u'<p class="example_header">Пример входных данных:<br><pre>', '</pre></p>')
+create_wrapper_tag('output', u'<p class="example_header">Пример выходных данных:<br><pre>', '</pre></p>')
+create_parameterized_wrapper_tag('section', u'<h3>{0}</h3>', '')
+create_parameterized_wrapper_tag('subsection', u'<h4>{0}</h4>', '')

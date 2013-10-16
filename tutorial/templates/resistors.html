@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Регистрация на lib.mipt.ru: решатель капчи</title>
+
+<style type="text/css">
+.input {
+  width: 1em;
+}
+</style>
+
+</head>
+
+<body>
+
+<form method="get" action="">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr>
+  <td>
+    <table cellspacing="0" cellpadding="0" border="0">
+    <tr>
+      <td rowspan="5" align="right" valign="middle" style="padding-right:2px;">A</td>
+      <td></td>
+      <td align="right" valign="bottom" style="padding-right:24px; padding-bottom: 1px;"><input type="text" name="upperleft" class="input" autofocus="autofocus">R</td>
+      <td></td>
+      <td align="left" valign="bottom" style="padding-left:24px; padding-bottom: 1px;"><input type="text" name="upperright" class="input">R</td>
+      <td></td>
+      <td rowspan="5" align="left" valign="middle" style="padding-left:2px;">B</td>
+    </tr>
+    <tr>
+      <td rowspan="3"><img src="{{ STATIC_URL}}resistors/left.gif" alt="" width="45" height="83" border="0"></td>
+      <td colspan="3"><img src="{{ STATIC_URL}}resistors/top.gif" alt="" width="170" height="15" border="0"></td>
+      <td rowspan="3"><img src="{{ STATIC_URL}}resistors/right.gif" alt="" width="50" height="83" border="0"></td>
+    </tr>
+    <tr>
+      <td width="79" valign="top"><img src="{{ STATIC_URL}}resistors/0.gif" alt="" width="79" height="1" border="0"></td>
+      <td width="14"><img src="{{ STATIC_URL}}resistors/center.gif" alt="" width="14" height="53" border="0"></td>
+      <td align="left" valign="middle" style="padding-left:2px;"><input type="text" name="middle" class="input">R</td>
+    </tr>
+    <tr>
+      <td colspan="3"><img src="{{ STATIC_URL}}resistors/bottom.gif" alt="" width="170" height="15" border="0"></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td align="right" valign="top" style="padding-right:24px; padding-top: 1px;"><input type="text" name="lowerleft" class="input">R</td>
+      <td></td>
+      <td align="left" valign="top" style="padding-left:24px; padding-top: 1px;"><input type="text" name="lowerright" class="input">R</td>
+      <td></td>
+    </tr>
+    </table>
+  
+  </td>
+  <td style="padding-left: 20pt;">
+    <table cellspacing="3" cellpadding="0" border="0">
+    <tr>
+      <td rowspan="3" style="padding-right: 3pt; font-size: 130%;">R<sub><small>AB</small></sub> = </td>
+      <td>
+        <input type="text" name="R1" size="5" value="{{ numerator }}" readonly>
+      </td>
+      <td rowspan="3" style="padding-left: 3pt; padding-right: 70pt; font-size: 130%;">R</td>
+    </tr>
+    <tr>
+      <td height="1" bgcolor="#808080"></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="text" name="R2" size="5" value="{{ denominator }}" readonly>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" style="padding-top: 0.6em;">
+        <input type="submit" value="Решить">
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+</table>  
+
+<!--
+{{ data }}
+  -->
+
+</form>
+
+
+
+</body>
+</html>
+

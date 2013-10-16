@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<h2>Регистрация нового пользователя</h2>
+
+{% if error %}
+<div class="errorMessage">{{ error }}</div>
+{% endif %}
+
+<form action="{% url register %}" method="POST">
+{% csrf_token %}
+<table>
+{{ form.as_table }}
+</table>
+<input type="submit">
+</form>
+{% endblock %}

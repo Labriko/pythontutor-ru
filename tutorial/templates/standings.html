@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<center>
+
+{% if navigation.lesson %}
+<h3>Таблица результатов занятия &laquo;{{ navigation.lesson.title }}&raquo;</h3>
+{% else %}
+    {% if navigation.course %}
+    <h3>Таблица результатов курса &laquo;{{ navigation.course.title }}&raquo;</h3>
+    {% endif %}
+{% endif %}
+
+<table border=1 class="standings">
+    <tr>
+        <td>Пользователь</td>
+        {% for problem in problems %}
+            <td>{{ problem.name }}</td>
+        {% endfor %}
+        <td>Решено задач</td>
+        <td>Рейтинг</td>
+    </tr>
+    {% for user, standings_line, num_solved, rating in users %}
+    <tr>
+        <td>{{ user.first_name }} {{ user.last_name }}</td>
+        {% for color, rgb_color, text, problem, submission in standings_line %}
+            <!--
+            <td title="{{ user.first_name }} {{ user.last_name }}, {{ problem.name }}" class="standings{{ color|capfirst }}Cell" align="center">
+            -->
+            <td title="{{ user.first_name }} {{ user.last_name }}, {{ problem.name }}{% if submission %}, {{ submission.time }}{% endif %}" style="background-color: {{ rgb_color }};" align="center">
+            {% if request.user.is_staff %} 
+            <a href="{% url admin:index %}tutorial/submission/{{ submission.id }}/">{{ text|safe }}</a>
+            {% else %}
+            {{ text|safe }}
+            {% endif %}
+            </td>
+        {% endfor %}
+        <td align="center">{{ num_solved }}</td>
+        <td align="center">{{ rating }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</center>
+
+{% endblock %}

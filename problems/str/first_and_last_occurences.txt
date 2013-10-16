@@ -1,0 +1,60 @@
+Name:
+Первое и последнее вхождения
+
+Statement:
+<p>Дана строка. Если в этом числе буква <code>f</code> встречается
+только один раз, выведите её индекс. Если она встречается два и более раз,
+выведите индекс её первого и последнего появления. Если буква
+<code>f</code> в данной строке не встречается, ничего не выводите.
+
+
+<p><b>При решении этой задачи не стоит использовать циклы.</b>
+
+Test:
+comfort
+
+Answer:
+3
+
+
+Test:
+office
+
+Answer:
+1 2
+
+
+Test:
+hello
+
+Answer:
+
+
+Test:
+fffffffffffffff
+
+Answer:
+0 14
+
+
+Test:
+aaaaaaaaaaaaaaaaaaaaafaaaaaaaaaaaaaaaaaaaaaaaa
+
+Answer:
+21
+
+
+Test:
+aaaaaaaaaaaaaaaaaaaaaaaaffaaaaaaaaaaaaaaaaaaaa
+
+Answer:
+24 25
+
+
+Test:
+afafafafafafafa
+
+Answer:
+1 13
+
+

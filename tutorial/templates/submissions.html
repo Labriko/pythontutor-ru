@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block headers %}
+<script type="text/javascript" src="{{ STATIC_URL }}submissions.js"></script>
+{% endblock %}
+
+{% block body %}
+
+<div id="submissionsHeader">
+    Показываются посылки по следующим контестам:
+    <div id="submissionsLessonsList">
+    </div>
+</div>
+
+{% comment %}
+
+За какими контестами идёт наблюдение
+Раз в минуту запрос на сервер обо всех посылках начиная с последнего номера
+Получение новых, добавление в начало
+
+Контест         Номер посылки           Имя пользователя            Статус              Время
+Код
+
+{% endcomment %}
+
+
+{% endblock %}
