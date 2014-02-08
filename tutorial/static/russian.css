@@ -1,0 +1,111 @@
+body {
+  background-color: white;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+.errorMessage {
+    color: red;
+}
+
+.loggedUserLine {
+    text-align: right;
+}
+
+.okProblemLink,
+.errorProblemLink {
+    padding: 2pt;
+}
+
+.errorProblemLink {
+    background-color: #faa;
+}
+
+.okProblemLink {
+    background-color: #afa;
+}
+
+.navigationLine {
+    padding-bottom: 14pt;
+}
+
+.standingsGreenCell {
+    background-color: #afa;
+}
+
+.standingsRedCell {
+    background-color: #faa;
+}
+
+.standingsWhiteCell {
+    background-color: white;
+}
+
+table.standings td {
+    padding: 4pt;
+}
+
+.courseDescription {
+  padding-left: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  /*text-align: right;
+  font-style: italic;*/
+  font-size: 9pt;
+}
+
+h3 {
+  padding-top: 10pt;
+}
+
+th {
+  text-align: left;
+}
+
+span.helptext {
+  color: grey;
+}
+
+.smartsnippet {
+  /*float: right;*/
+  width: 75%;
+
+  padding: 10px;
+  margin-left: 10px;
+
+  background-color: #ddd;
+  color: #000;
+
+  text-align: left;
+  line-height: 120%;
+}
+
+.userAndIdealSolutions {
+  margin-left: 3em;
+  border-collapse: collapse;
+}
+
+.userAndIdealSolutions .header {
+  padding: 4pt;
+  text-align: center;
+  background-color: #eee;
+}
+
+.userAndIdealSolutions .body {
+  vertical-align: top;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+.okBackground {
+  background-color: #afa; 
+  margin-top: 4pt;
+  padding: 4pt;
+}
+
+.errorBackground {
+  background-color: #faa;
+  margin-top: 4pt;
+  padding: 4pt;
+}
