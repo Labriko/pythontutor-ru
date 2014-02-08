@@ -7,30 +7,30 @@
 
 1. Поставьте пакетный менеджер
 
-    sudo apt-get install python3-setuptools
+        sudo apt-get install python3-setuptools
 
 2. Поставьте менеджер виртуальных окружений Питона
 
-    sudo pip install virtualenv
+        sudo pip install virtualenv
 
 3. Склонируйте репозиторий проекта, перейдите в него, создайте виртуальное окружение
 
-    git clone https://github.com/vpavlenko/pythontutor-ru.git
-    cd pythontutor-ru
-    virtualenv-3.3 venv
+        git clone https://github.com/vpavlenko/pythontutor-ru.git
+        cd pythontutor-ru
+        virtualenv-3.3 venv
 
 4. Активируйте виртуальное окружение и установите зависимости проекта
 
-    source venv/bin/activate
+        source venv/bin/activate
 
 5. Создайте базу данных. При создании выберите `yes` и задайте логин и пароль администратора
 
-    python3 manage.py syncdb
-    python3 manage.py migrate tutorial
+        python3 manage.py syncdb
+        python3 manage.py migrate tutorial
 
 6. Запустите сервер разработчика
 
-    python3 manage.py runserver
+        python3 manage.py runserver
 
 
 Лицензия
