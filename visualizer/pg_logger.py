@@ -88,7 +88,7 @@ def get_user_locals(frame):
 
 def filter_var_dict(d):
   ret = {}
-  for (k,v) in d.iteritems():
+  for (k,v) in d.items():
     if k not in IGNORE_VARS:
       ret[k] = v
   return ret
@@ -192,7 +192,7 @@ class PGLogger(bdb.Bdb):
           # encode in a JSON-friendly format now, in order to prevent ill
           # effects of aliasing later down the line ...
           encoded_locals = {}
-          for (k, v) in get_user_locals(cur_frame).iteritems():
+          for (k, v) in get_user_locals(cur_frame).items():
             # don't display some built-in locals ...
             if k != '__module__':
               encoded_locals[k] = pg_encoder.encode(v, self.ignore_id)
@@ -203,7 +203,7 @@ class PGLogger(bdb.Bdb):
         # encode in a JSON-friendly format now, in order to prevent ill
         # effects of aliasing later down the line ...
         encoded_globals = {}
-        for (k, v) in get_user_globals(tos[0]).iteritems():
+        for (k, v) in get_user_globals(tos[0]).items():
           encoded_globals[k] = pg_encoder.encode(v, self.ignore_id)
 
         trace_entry = dict(line=lineno,
@@ -230,10 +230,6 @@ class PGLogger(bdb.Bdb):
 
 
     def _runscript(self, script_str, input_data):
-        reload(sys) 
-        sys.setdefaultencoding("utf-8")
-
-
         # When bdb sets tracing, a number of call and line events happens
         # BEFORE debugger even reaches user's code (and the exact sequence of
         # events depends on python version). So we take special measures to
@@ -244,7 +240,7 @@ class PGLogger(bdb.Bdb):
         # ok, let's try to sorta 'sandbox' the user script by not
         # allowing certain potentially dangerous operations:
         user_builtins = {}
-        for (k,v) in __builtins__.iteritems():
+        for (k,v) in __builtins__.items():
           if k in ('reload', 'apply', 'open', 'compile', 'input', #'__import__',
                    'file', 'eval', 'execfile', 'exec',
                    'exit', 'quit', 
@@ -263,19 +259,19 @@ class PGLogger(bdb.Bdb):
 
         # disgusting cocktail of python 2 and 3
 
-        user_builtins['old_raw_input'] = __builtins__['raw_input']
+        user_builtins['old_raw_input'] = __builtins__['input']
         user_builtins['input'] = user_builtins['raw_input'] = input__workaround
         user_builtins['print__workaround'] = print__workaround
         user_builtins['ceil__workaround'] = ceil__workaround
         user_builtins['floor__workaround'] = floor__workaround
 
-        user_stdin = StringIO.StringIO(input_data)
+        user_stdin = StringIO(input_data)
 
         global user_stdout
 
-        user_stdout = StringIO.StringIO()
+        user_stdout = StringIO()
 
-        config_workarounds(__builtins__['raw_input'], user_stdout, sys.stdout)
+        config_workarounds(__builtins__['input'], user_stdout, sys.stdout)
 
         sys.stdin = user_stdin
 
@@ -316,7 +312,7 @@ class PGLogger(bdb.Bdb):
             trace_entry['offset'] = exc.offset
 
           if hasattr(exc, 'msg'):
-            print('exc has message:\n\t{0}'.format(exc.msg))
+            print(('exc has message:\n\t{0}'.format(exc.msg)))
             trace_entry['exception_msg'] = "Error: " + exc.msg
           else:
             trace_entry['exception_msg'] = "Unknown error"
@@ -373,7 +369,7 @@ class PGLogger(bdb.Bdb):
           try:
             d['exception_msg'] = get_error_explanation(exception_msg, script[lineno - 1] if lineno else None)
           except Exception as e:
-            d['exception_msg'] = unicode(exception_msg) + '<br>Another exception occured while explanation<br>' + unicode(e)
+            d['exception_msg'] = str(exception_msg) + '<br>Another exception occured while explanation<br>' + str(e)
 
 
     def obscure_python2_guts(self):
@@ -387,12 +383,12 @@ class PGLogger(bdb.Bdb):
       for d in self.trace:
         g = d.get('globals', None)
         if g:
-          for k, v in g.items():
+          for k, v in list(g.items()):
             g[k] = obscure(v)
         g = d.get('stack_locals', None)
         if g:
           for func_name, variables_dict in g:
-            for k, v in variables_dict.items():
+            for k, v in list(variables_dict.items()):
               variables_dict[k] = obscure(v)
 
 
@@ -402,7 +398,7 @@ def exec_script_str(script_str, input_data, finalizer_func, ignore_id=False):
   print('version: 13:40')
   # print 'input by bytes:\n{0}\n'.format(by_bytes(input_data))
   logger = PGLogger(finalizer_func, ignore_id)
-  input_data = unicode(input_data)
+  input_data = str(input_data)
   logger._runscript(script_str, input_data)
 
 
@@ -421,6 +417,6 @@ def exec_file_and_pretty_print(mainpyfile, input_data_file):
 
 if __name__ == '__main__':
   # need this round-about import to get __builtins__ to work :0
-  import pg_logger
+  from . import pg_logger
   pg_logger.exec_file_and_pretty_print(sys.argv[1], sys.argv[2])
 

@@ -58,7 +58,7 @@ def encode(dat, ignore_id=False):
   def encode_helper(dat, compound_obj_ids):
     # primitive type
     if dat is None or \
-       type(dat) in (int, long, float, str, bool):
+       type(dat) in (int, int, float, str, bool):
       return dat
     # compound type
     else:
@@ -92,11 +92,11 @@ def encode(dat, ignore_id=False):
         for e in dat: ret.append(encode_helper(e, new_compound_obj_ids))
       elif typ == dict:
         ret = ['DICT', my_small_id]
-        for (k,v) in dat.iteritems():
+        for (k,v) in dat.items():
           # don't display some built-in locals ...
           if k not in ('__module__', '__return__'):
             ret.append([encode_helper(k, new_compound_obj_ids), encode_helper(v, new_compound_obj_ids)])
-      elif typ in (types.InstanceType, types.ClassType, types.TypeType) or \
+      elif typ in (types.InstanceType, type, type) or \
            classRE.match(str(typ)):
         # ugh, classRE match is a bit of a hack :(
         if typ == types.InstanceType or classRE.match(str(typ)):
@@ -107,7 +107,7 @@ def encode(dat, ignore_id=False):
 
         # traverse inside of its __dict__ to grab attributes
         # (filter out useless-seeming ones):
-        user_attrs = sorted([e for e in dat.__dict__.keys() 
+        user_attrs = sorted([e for e in list(dat.__dict__.keys()) 
                              if e not in ('__doc__', '__module__', '__return__')])
 
         for attr in user_attrs:

@@ -48,7 +48,7 @@ class NameSurnameListFilter(admin.SimpleListFilter):
         users_with_submission_count = [(user, user.last_name, user.submission_set.count()) for user in User.objects.prefetch_related().all()]
         users_with_submission_count.sort(key=submission_sort_key)
         users = zip(*users_with_submission_count)[0]
-        return [(user.username, u'{1} {0} ({2}) [{3}]'.format(user.first_name, user.last_name, user.username, user.submission_set.count())) for user in users]
+        return [(user.username, '{1} {0} ({2}) [{3}]'.format(user.first_name, user.last_name, user.username, user.submission_set.count())) for user in users]
 
     def queryset(self, request, queryset):
         if self.value():
@@ -78,12 +78,12 @@ class CourseListFilter(admin.SimpleListFilter):
 
 def make_ok(modeladmin, requst, queryset):
     queryset.update(status=1) # should be code for 'ok'!
-make_ok.short_description = u'Поставить ok выбранным посылкам'
+make_ok.short_description = 'Поставить ok выбранным посылкам'
 
 
 def make_accepted(modeladmin, requst, queryset):
     queryset.update(status=2) # should be code for 'accepted'!
-make_accepted.short_description = u'Поставить accepted выбранным посылкам'
+make_accepted.short_description = 'Поставить accepted выбранным посылкам'
 
 
 class SubmissionAdmin(admin.ModelAdmin):
@@ -92,7 +92,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     actions = [make_ok, make_accepted]
 
     def name_surname(self, submission):
-        return u'{0} {1}'.format(submission.user.first_name, submission.user.last_name)
+        return '{0} {1}'.format(submission.user.first_name, submission.user.last_name)
 
     name_surname.short_description = 'Name Surname'
 

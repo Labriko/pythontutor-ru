@@ -183,4 +183,4 @@ if __name__ == '__main__':
     print("Expected:")
     print(expectation)
     print("Got:")
-    print(three_to_two(code))
+    print((three_to_two(code)))

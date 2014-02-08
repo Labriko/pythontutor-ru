@@ -87,7 +87,7 @@ def really_finalize():
 
   if not user_trace:
     ret['status'] = 'error'
-    ret['error_msg'] = u'На тестирование отправлена пустая программа'
+    ret['error_msg'] = 'На тестирование отправлена пустая программа'
   else:
     output = user_trace[-1]['stdout']
 

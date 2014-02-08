@@ -45,6 +45,7 @@
 
 
 import json
+from visualizer.pg_logger import exec_script_str
 
 
 def web_finalizer(output_lst):
@@ -59,6 +60,6 @@ def web_finalizer(output_lst):
 
 def exec_script_on_input(user_script, input_data):
   # pg_logger.set_max_executed_lines(max_instructions)
-  pg_logger.exec_script_str(user_script, input_data, web_finalizer)
+  exec_script_str(user_script, input_data, web_finalizer)
 
   return output_json

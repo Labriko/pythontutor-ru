@@ -7,7 +7,7 @@ from tutorial.load_problems import load_problem
 from django.conf import settings
 
 
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import cgi
 
 
@@ -22,7 +22,7 @@ LESSON_IMG_ROOT = '/pylernu/static/lesson_images/'
 
 
 def _insert_code_into_url(code):
-    return urllib.quote(code.encode('utf-8'), '')
+    return urllib.parse.quote(code.encode('utf-8'), '')
 
 
 def _render_code_to_html(code, input_data='', context={}, executable=True, blockquote=True):
@@ -31,10 +31,10 @@ def _render_code_to_html(code, input_data='', context={}, executable=True, block
             format(context.get('navigation')['course'].urlname, context.get('navigation')['lesson'].urlname) + " %}").render(context)
     else:
         visualizer_link = template.Template("r{% url visualizer %}").render(context)
-    return ((u'''<blockquote>''' if blockquote else '') 
+    return (('''<blockquote>''' if blockquote else '') 
         + '''{program_code_start}{0}{program_code_end}''' 
-        + (u'''<a href="{1}?code={2}&input={3}">Показать код в визуализаторе</a>''' if executable else '')
-        + (u'''</blockquote>''' if blockquote else '')).format(cgi.escape(code), visualizer_link, _insert_code_into_url(code), _insert_code_into_url(input_data), **globals())
+        + ('''<a href="{1}?code={2}&input={3}">Показать код в визуализаторе</a>''' if executable else '')
+        + ('''</blockquote>''' if blockquote else '')).format(cgi.escape(code), visualizer_link, _insert_code_into_url(code), _insert_code_into_url(input_data), **globals())
 
 
 
@@ -71,7 +71,7 @@ class InputDataNode(template.Node):
     def render(self, context):
         input_data = self.nodelist.render(context).strip()
         context["input_data"] = input_data
-        return u''
+        return ''
 
 
 @register.tag('inputdata')
@@ -100,7 +100,7 @@ class ProblemLinkNode(template.Node):
             css_class = 'errorProblemLink'
         else:
             css_class = 'unsubmittedProblemLink'
-        return u'<span class="{0}">{1}</span>'.format(css_class, problem['name'])
+        return '<span class="{0}">{1}</span>'.format(css_class, problem['name'])
 
 
 @register.tag('problem_link')
@@ -132,7 +132,7 @@ class IdealSolutionNode(template.Node):
                 in Submission.objects.filter(user=ideal_user, problem=problem['db_object']).order_by('-time')
                 if submission.get_status_display() == 'ok']
         if user_solutions and ideal_solutions:
-            return u'''
+            return '''
                 <table border="1" class="userAndIdealSolutions">
                     <tr>
                         <td class="header">Ваше решение</td>
@@ -159,7 +159,7 @@ class IdealSolutionNode(template.Node):
                                                                  executable=True,
                                                                  blockquote=False), **globals()))
         else:
-            return u''
+            return ''
 
 
 @register.tag('ideal_solution')
@@ -182,10 +182,10 @@ class LessonNode(template.Node):
         sections = context.get("sections", [])
         html = ['<div class="lesson">']
         if 'section_counter' in context:
-            html.append(u'<div class="sections">Содержание:')
+            html.append('<div class="sections">Содержание:')
             for i, name in enumerate(sections):
-                html.append(u'<br><a href="#{0}">{1}</a>'.format(i, name))
-            html.append(u'</div>\n')
+                html.append('<br><a href="#{0}">{1}</a>'.format(i, name))
+            html.append('</div>\n')
         html.append(content)
         html.append('</div>')
         return ''.join(html)
@@ -205,15 +205,15 @@ class WrapperNode(template.Node):
         self.html_after = html_after
 
     def render(self, context):
-        return (template.Template(unicode(self.html_before)).render(context) + 
+        return (template.Template(str(self.html_before)).render(context) + 
                 self.nodelist.render(context) + 
-                template.Template(unicode(self.html_after)).render(context))
+                template.Template(str(self.html_after)).render(context))
 
 
 class SectionNode(WrapperNode):
     def __init__(self, nodelist, section_name):
         super(SectionNode, self).__init__(nodelist, 
-                u'<h3><a name="{0}">' + u'{0}'.format(section_name) + u'</a></h3>', u'')
+                '<h3><a name="{0}">' + '{0}'.format(section_name) + '</a></h3>', '')
         self.section_name = section_name
 
     def render(self, context):
@@ -230,7 +230,7 @@ class SingleNode(template.Node):
         self.html = html
 
     def render(self, context):
-        return template.Template(unicode(self.html)).render(context)
+        return template.Template(str(self.html)).render(context)
 
 
 def create_wrapper_tag(name, html_before, html_after):
@@ -248,7 +248,7 @@ def create_parameterized_wrapper_tag(name, html_before, html_after):
         nodelist = parser.parse(('end' + name,))
         parser.delete_first_token()
         try:
-            return WrapperNode(nodelist, html_before.format(*[unicode(p)[1:-1] for p in params]), html_after)   
+            return WrapperNode(nodelist, html_before.format(*[str(p)[1:-1] for p in params]), html_after)   
         except IndexError:
             raise IndexError("tag '{0}' doesn't have a required parameter".format(name))
 
@@ -258,7 +258,7 @@ def create_parameterized_single_tag(name, html):
     def wrapper_tag_func(parser, token):
         params = token.split_contents()[1:]
         try:
-            return SingleNode(html.format(*[unicode(p)[1:-1] for p in params]))
+            return SingleNode(html.format(*[str(p)[1:-1] for p in params]))
         except IndexError:
             raise IndexError("tag '{0}' doesn't have a required parameter".format(name))
 
@@ -269,19 +269,19 @@ def wrapper_tag_func(parser, token):
     nodelist = parser.parse(('endsection',))
     parser.delete_first_token()
     try:
-        return SectionNode(nodelist, unicode(params[0])[1:-1])
+        return SectionNode(nodelist, str(params[0])[1:-1])
     except IndexError:
         raise IndexError("tag 'section' doesn't have a required parameter")
 
 
-create_wrapper_tag('input', u'<p class="example_header">Пример входных данных:<br><pre>', '</pre></p>')
-create_wrapper_tag('output', u'<p class="example_header">Пример выходных данных:<br><pre>', '</pre></p>')
-create_wrapper_tag('smartsnippet', u'<p><div class="smartsnippet">', '</div></p>')
-create_wrapper_tag('newword', u'<u>', '</u>')
-create_wrapper_tag('theorem', u'<p><b>Теорема. </b>', '</p>')
-create_wrapper_tag('proof', u'<p><i>Доказательство. </i>', ' &#x25ae;</p>')
+create_wrapper_tag('input', '<p class="example_header">Пример входных данных:<br><pre>', '</pre></p>')
+create_wrapper_tag('output', '<p class="example_header">Пример выходных данных:<br><pre>', '</pre></p>')
+create_wrapper_tag('smartsnippet', '<p><div class="smartsnippet">', '</div></p>')
+create_wrapper_tag('newword', '<u>', '</u>')
+create_wrapper_tag('theorem', '<p><b>Теорема. </b>', '</p>')
+create_wrapper_tag('proof', '<p><i>Доказательство. </i>', ' &#x25ae;</p>')
 
 # create_parameterized_wrapper_tag('section', u'<h3>{0}</h3>', '')
-create_parameterized_wrapper_tag('subsection', u'<h4>{0}</h4>', '')
+create_parameterized_wrapper_tag('subsection', '<h4>{0}</h4>', '')
 
-create_parameterized_single_tag('img', u'<p align="center"><img src="' + LESSON_IMG_ROOT + '{0}" width="{1}%"></p>')
+create_parameterized_single_tag('img', '<p align="center"><img src="' + LESSON_IMG_ROOT + '{0}" width="{1}%"></p>')

@@ -95,7 +95,7 @@ def load_problem(problem):
   ret['filename'] = problem.filename
   ret['db_object'] = problem
 
-  raw_statement = (u'{% load tags %}\n' + ret['statement'] + 
+  raw_statement = ('{% load tags %}\n' + ret['statement'] + 
                    '{% input %}' + ret['tests'][0] + '{% endinput %}' +
                    '{% output %}' + ret['answers'][0] + '{% endoutput %}')
   t = template.Template(raw_statement)

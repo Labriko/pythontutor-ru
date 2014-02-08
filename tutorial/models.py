@@ -17,7 +17,7 @@ class Problem(models.Model):
     filename = models.CharField('Имя файла с задачей', max_length=200, blank=True)
 
     def __unicode__(self):
-        return u'{self.urlname}'.format(**locals())
+        return '{self.urlname}'.format(**locals())
 
 
 class Lesson(models.Model):
@@ -30,7 +30,7 @@ class Lesson(models.Model):
     external_contest_link = models.CharField('Внешняя ссылка на контест', max_length=200, blank=True, null=True)
 
     def __unicode__(self):
-        return u'{self.urlname}: {self.title} (файл: {self.filename})'.format(**locals())
+        return '{self.urlname}: {self.title} (файл: {self.filename})'.format(**locals())
 
     def __le__(self, other):
         return self.id < other.id
@@ -72,7 +72,7 @@ class UserProfile(models.Model):
     # here you can add fields like 'school'
 
     def __unicode__(self):
-        return u'{0} {1} ({2})'.format(self.user.first_name, self.user.last_name, self.user.username)
+        return '{0} {1} ({2})'.format(self.user.first_name, self.user.last_name, self.user.username)
 
 
 class Submission(models.Model):
@@ -92,5 +92,5 @@ class Submission(models.Model):
     comment = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
-        return u'{self.user.first_name} {self.user.last_name} on {self.problem}: {0} ({self.time})'\
+        return '{self.user.first_name} {self.user.last_name} on {self.problem}: {0} ({self.time})'\
                 .format(self.get_status_display(), **locals())

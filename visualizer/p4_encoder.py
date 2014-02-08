@@ -44,7 +44,7 @@ def encode(dat, ignore_id=False):
       # traverse the __dict__ to grab attributes
       # (filter out useless-seeming ones):
 
-      user_attrs = sorted([e for e in dict.keys()
+      user_attrs = sorted([e for e in list(dict.keys())
               if e not in {'__doc__', '__module__', '__return__', '__locals__',
                            '__weakref__', '__dict__'}
                          ])
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     test(encode(min), ['builtin_function_or_method', addr, '<built-in function min>'] )
 
     addr += 1
-    test(encode(range(1,3)), ['range', addr, 'range(1, 3)'])
+    test(encode(list(range(1,3))), ['range', addr, 'range(1, 3)'])
 
     addr += 1
     test(encode({1,2}), ['SET', addr, 1, 2])
@@ -189,4 +189,4 @@ if __name__ == '__main__':
 # Need some new tests for  z = type(123)
 
 
-    print(encode({"stdout": "", "func_name": "<module>", "globals": {"sum": 0, "friends": ["LIST", 1, "Joe", "Bill"], "length": 3, "f": "Joe"}, "stack_locals": [], "line": 7, "event": "step_line"}))
+    print((encode({"stdout": "", "func_name": "<module>", "globals": {"sum": 0, "friends": ["LIST", 1, "Joe", "Bill"], "length": 3, "f": "Joe"}, "stack_locals": [], "line": 7, "event": "step_line"})))

@@ -29,7 +29,7 @@
 #   python run_tests.py --all
 
 import os, sys, re, shutil, filecmp, optparse, difflib
-import pg_logger
+from . import pg_logger
 
 
 # all tests are found in this directory:
@@ -42,13 +42,13 @@ def execute(test_script):
   def my_finalizer(output_lst):
     outfile = open(test_script[:-3] + '.out', 'w')
     output_json = json.dumps(output_lst)
-    print >> outfile, output_json
+    print(output_json, file=outfile)
 
   pg_logger.exec_script_str(open(test_script).read(), my_finalizer, True)
 
 
 def clobber_golden_file(golden_file):
-  print '  Overriding golden file'
+  print('  Overriding golden file')
   outfile = golden_file.replace('.golden', '.out')
   assert os.path.isfile(outfile)
   shutil.copy(outfile, golden_file)
@@ -84,11 +84,11 @@ def diff_test_output(test_name):
 
   for line in difflib.unified_diff(golden_s_filtered, out_s_filtered, \
                                    fromfile=golden_file, tofile=outfile):
-    print line,
+    print(line, end=' ')
 
 
 def run_test(test_name, clobber_golden=False):
-  print 'Testing', test_name
+  print('Testing', test_name)
   assert test_name.endswith('.py')
   outfile = test_name[:-3] + '.out'
   if os.path.isfile(outfile):
@@ -102,7 +102,7 @@ def run_test(test_name, clobber_golden=False):
   golden_file = test_name[:-3] + '.golden'
   if os.path.isfile(golden_file):
     if diff_test_golden_data(golden_file):
-      print "  FAILED"
+      print("  FAILED")
     if clobber_golden:
       clobber_golden_file(golden_file)
   else:
@@ -115,7 +115,7 @@ def run_all_tests(clobber=False):
 
 def diff_all_test_outputs():
   for t in ALL_TESTS:
-    print '=== diffing', t, '==='
+    print('=== diffing', t, '===')
     diff_test_output(t)
 
 
@@ -138,9 +138,9 @@ if __name__ == "__main__":
   (options, args) = parser.parse_args()
   if options.run_all:
     if options.clobber:
-      print 'Running all tests and clobbering results ...'
+      print('Running all tests and clobbering results ...')
     else:
-      print 'Running all tests ...'
+      print('Running all tests ...')
     run_all_tests(options.clobber)
 
   elif options.diff_all:

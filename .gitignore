@@ -43,3 +43,6 @@ logs/*.log
 
 # Database
 *.db
+
+# Backups
+*.bak

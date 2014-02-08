@@ -29,7 +29,7 @@
 # and return it to the caller in JSON format
 QUESTIONS_DIR = '../questions/'
 
-from parse_questions import parseQuestionsFile
+from .parse_questions import parseQuestionsFile
 
 import cgi, os, json
 
@@ -42,5 +42,5 @@ assert os.path.isfile(fn)
 
 # Crucial first line to make sure that Apache serves this data
 # correctly - DON'T FORGET THE EXTRA NEWLINES!!!:
-print "Content-type: text/plain; charset=iso-8859-1\n\n"
-print json.dumps(parseQuestionsFile(fn))
+print("Content-type: text/plain; charset=iso-8859-1\n\n")
+print(json.dumps(parseQuestionsFile(fn)))
