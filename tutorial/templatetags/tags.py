@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django import template
-from pylernu.tutorial.models import Problem, Submission
+from tutorial.models import Problem, Submission
 from django.contrib.auth.models import User
-from pylernu.tutorial.load_problems import load_problem
-from pylernu import settings
+from tutorial.load_problems import load_problem
+from django.conf import settings
 
 
 import urllib

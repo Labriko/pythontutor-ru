@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import models
+from tutorial import models
 
 from django.contrib import admin
 
@@ -35,6 +35,10 @@ class CourseAdmin(admin.ModelAdmin):
     inlines = (LessonInCourseInline,)
 
 
+def submission_sort_key(user, last_name, count):
+    return last_name if count else chr(0xffff)
+
+
 class NameSurnameListFilter(admin.SimpleListFilter):
     title = 'name surname'
 
@@ -42,7 +46,7 @@ class NameSurnameListFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         users_with_submission_count = [(user, user.last_name, user.submission_set.count()) for user in User.objects.prefetch_related().all()]
-        users_with_submission_count.sort(key = lambda (user, last_name, count): last_name if count else unichr(0xffff))
+        users_with_submission_count.sort(key=submission_sort_key)
         users = zip(*users_with_submission_count)[0]
         return [(user.username, u'{1} {0} ({2}) [{3}]'.format(user.first_name, user.last_name, user.username, user.submission_set.count())) for user in users]
 

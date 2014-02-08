@@ -1,8 +1,11 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+import os
 
-ABSOLUTE_PATH_TO_FILE_WITH_ERRORS = '/var/www/pylernu/errors/errors.txt'
+SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+ABSOLUTE_PATH_TO_FILE_WITH_ERRORS = os.path.join(SCRIPT_ROOT, 'errors.txt')
 
 
 import re
@@ -15,7 +18,7 @@ class Error:
             self.locals_dict = {}
             if linedetector:
                 # should create a function 'detect_error(error_msg, code_line)'
-                exec linedetector in self.locals_dict
+                exec(linedetector, self.locals_dict)
 
         def is_matched(self, error_msg, code_line):
             if 'detect_error' in self.locals_dict:
@@ -27,7 +30,7 @@ class Error:
             return self.translation.format(*re.match(self.regexp, error_msg).groups())
 
         def __unicode__(self):
-            return u'Error({0}, {1})'.format(self.regexp, self.translation)
+            return 'Error({0}, {1})'.format(self.regexp, self.translation)
 
 
 errors = []
@@ -59,7 +62,7 @@ def load_error_information():
 
     for line in open(ABSOLUTE_PATH_TO_FILE_WITH_ERRORS):
         # only strip TRAILING spaces and not leading spaces
-        line = line.rstrip().decode('utf-8')
+        line = line.rstrip()
 
         # comments are denoted by a leading '//', so ignore those lines.
         # Note that I don't use '#' as the comment token since sometimes I
@@ -79,19 +82,19 @@ def load_error_information():
 
 
 def get_error_explanation(error_msg, code_line):
-    print 'trying to explain error {0}'.format(error_msg)
+    print('trying to explain error {0}'.format(error_msg))
     for error in errors:
         #print 'matching (waiting for failed utf-8 stuff)'
         #print repr(u'matching with {0}'.format(error))
         if error.is_matched(error_msg, code_line):
-            explanation = unicode(error_msg) + u'<br>' + error.get_translation(error_msg)
-            print repr(u'explanation found:\n{0}'.format(explanation))
+            explanation = str(error_msg) + '<br>' + error.get_translation(error_msg)
+            print(repr('explanation found:\n{0}'.format(explanation)))
             return explanation
-    print 'no explanation found'
+    print('no explanation found')
     return error_msg
 
 
 load_error_information()
 
 if __name__ == '__main__':
-    print get_error_explanation("TypeError: unsupported operand type(s) for +: 'builtin_function_or_method' and 'builtin_function_or_method'", '')
+    print(get_error_explanation("TypeError: unsupported operand type(s) for +: 'builtin_function_or_method' and 'builtin_function_or_method'", ''))

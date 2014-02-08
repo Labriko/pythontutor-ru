@@ -32,7 +32,7 @@
 
 
 import cgi
-import pg_logger
+import visualizer.pg_logger
 
 import json
 import pprint
@@ -85,8 +85,6 @@ def really_finalize():
   # we should compare user_trace[-1]['stdout'] with answer
   global output_json
 
-  print 'postprocessing trace'
-
   if not user_trace:
     ret['status'] = 'error'
     ret['error_msg'] = u'На тестирование отправлена пустая программа'
@@ -114,11 +112,8 @@ def really_finalize():
     #   print user_trace
     #   ret['error_msg'] = user_trace_final_entry['exception_msg']
 
-  print 'about to dump trace to json'
-
   output_json = json.dumps(ret)
 
-  print 'dump successfully done'
 
 def run_script_on_test_input(user_script, test_input, test_answer):
   global answer

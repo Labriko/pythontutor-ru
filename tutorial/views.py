@@ -1,33 +1,32 @@
 # -*- coding: utf-8 -*-
 
+import operator
+import json
+import functools
+import collections
+
 from django.shortcuts import render, redirect
 
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django import template
-
 from django.contrib.auth.models import User
-from models import Problem, Lesson, Course, UserProfile, Submission
-from forms import UserCreationForm, UserProfileForm
+from django.conf import settings
 
-from pylernu import settings
-from pylernu.visualizer.web_exec import exec_script_on_input
-from pylernu.visualizer.web_run_test import run_script_on_test_input
-from load_problems import load_problem, load_raw_problem
-from utils import get_submission_color, sign_by_status, color_by_status
+from tutorial.models import Problem, Lesson, Course, UserProfile, Submission
+from tutorial.forms import UserCreationForm, UserProfileForm
 
-
-import operator
-import json
-import functools
-import collections
+from visualizer.web_exec import exec_script_on_input
+from visualizer.web_run_test import run_script_on_test_input
+from tutorial.load_problems import load_problem, load_raw_problem
+from tutorial.utils import get_submission_color, sign_by_status, color_by_status
 
 
 # MAX_INSTRUCTIONS_LIMIT = 200
 ABSOLUTE_PATH_TO_LESSONS = settings.ABSOLUTE_PREFIX + 'lessons/'
 
 
-def dummy(request): 
+def dummy(request):
     return HttpResponse('dummy requested')
 
 
@@ -259,12 +258,12 @@ def post_grading_result(request):
         status = post['result']
         user = request.user
 
-	if user.get_profile().course and user.get_profile().course.get_ok_ac_policy_display() == 'use_accepted_instead_of_ok':
-            if status == 'ok':
-                status = 'accepted'
+    if user.get_profile().course and user.get_profile().course.get_ok_ac_policy_display() == 'use_accepted_instead_of_ok':
+        if status == 'ok':
+            status = 'accepted'
 
         submission = Submission(problem=problem, code=code, user=user, 
-                status={v: k for k, v in Submission.STATUS_CHOICES}[status])
+                                status={v: k for k, v in Submission.STATUS_CHOICES}[status])
 
         submission.save()
 

@@ -1,0 +1,1 @@
+Курс построен на основе материалов Д. П. Кириенко, которые распространяются по лицензии [Creative Commons «Attribution-NonCommercial-ShareAlike»](http://creativecommons.org/licenses/by-nc-sa/3.0/deed.ru)

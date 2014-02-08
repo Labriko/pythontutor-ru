@@ -43,10 +43,10 @@ $(document).ready(function() {
         <p class="courseDescription">{{ lic.lesson.description|safe }}</p>
         {% endif %}
     {% endcomment %}
-    <p>Занятие {{ lic.order }}. <a href="{% url courses %}{{ course.urlname }}/lessons/{{ lic.lesson.urlname }}/">{{ lic.lesson.title }}</a>
+    <p>Занятие {{ lic.order }}. <a href="{% url 'courses' %}{{ course.urlname }}/lessons/{{ lic.lesson.urlname }}/">{{ lic.lesson.title }}</a>
     </p>
 {% endfor %}
-<a href="{% url courses %}{{ course.urlname}}/standings/">Результаты курса</a>
+<a href="{% url 'courses' %}{{ course.urlname}}/standings/">Результаты курса</a>
 </div>
 
 {% endfor %}
@@ -78,7 +78,7 @@ z = ["Alice", "Bob", "Charlie"]
 <center>
 <img src="{{ STATIC_URL }}alias-screenshot.png" style="width: 500px"/>
 
-<h3><a href="{% url visualizer %}">Перейти к онлайн-интерпретатору Python!</a></h3>
+<h3><a href="{% url 'visualizer' %}">Перейти к онлайн-интерпретатору Python!</a></h3>
 </center>
 
 </div>

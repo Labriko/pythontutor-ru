@@ -44,11 +44,7 @@
 #   AddHandler cgi-script .py
 
 
-import cgi
-import pg_logger
-
 import json
-import pprint
 
 
 def web_finalizer(output_lst):
@@ -57,21 +53,12 @@ def web_finalizer(output_lst):
   # use compactly=False to produce human-readable JSON,
   # except at the expense of being a LARGER download
 
-  # pprint.pprint(output_lst)
-
-  print 'about to dump trace to json'
-
   output_json = json.dumps(output_lst)
 
-  print 'dump successfully done'
-
-  # pprint.pprint(output_json)
 
 
 def exec_script_on_input(user_script, input_data):
   # pg_logger.set_max_executed_lines(max_instructions)
   pg_logger.exec_script_str(user_script, input_data, web_finalizer)
-
-  print 'return json'
 
   return output_json

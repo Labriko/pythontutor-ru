@@ -14,16 +14,10 @@ from tutorial.views import (dummy, home, visualizer, execute, lesson_in_course,
 #from tutorial.misc.views import resistors
 
 
-import settings
+from django.conf import settings
 
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'pylernu.views.home', name='home'),
-    # url(r'^pylernu/', include('pylernu.foo.urls')),
-
-    url(r'summarization/', include('pylernu.django_demo_app.urls')),
-
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -69,9 +63,4 @@ urlpatterns = patterns('',
     url(r'^teacher_statistics/submissions/for_course/([^/]+)/$', submissions_for_course, name='submissions_for_course'),
     # example of use:
     # teacher_statistics/submissions/for_lessons/ifelse,for_loop/
-
-    # OFFTOP
-    #url(r'resistors/', 'pylernu.tutorial.misc.views', name='resistors'),
-
-
 )

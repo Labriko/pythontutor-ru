@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
-# Django settings for pylernu project.
+import os
+SCRIPT_ROOT = os.path.abspath(os.path.dirname(__file__))
+
+# Django settings for pythontutor project.
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -14,8 +17,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '/var/www/pylernu/my_db',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'pythontutor.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -59,9 +62,9 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/var/www/pylernu/static_root/'
+STATIC_ROOT = os.path.join(SCRIPT_ROOT, 'collected_static')
 
-SERVER_PREFIX = '/pylernu/'
+SERVER_PREFIX = '/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -77,7 +80,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/var/www/pylernu/static/',
+
 )
 
 # List of finder classes that know how to find static files in
@@ -101,16 +104,16 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    
-    # небезопасно отключать это приложение, но оно прибавляет 
+
+    # небезопасно отключать это приложение, но оно прибавляет
     # геммороя при POST-запросах
     # 'django.middleware.csrf.CsrfViewMiddleware',
-    
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'pylernu.urls'
+ROOT_URLCONF = 'pythontutor.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -131,7 +134,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
-    'pylernu.tutorial',
+    'tutorial',
     #'django_demo_app',
     #'misc',
 )
@@ -144,6 +147,11 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -155,13 +163,15 @@ LOGGING = {
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
+            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'log_file':{
+        'log_file': {
             'level': 'DEBUG',
+            'filters': ['require_debug_false'],
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/www/pylernu/logs/debug.log',
-            'maxBytes': '67108864', # 64 megabytes
+            'filename': 'logs/debug.log',
+            'maxBytes': 67108864,  # 64 megabytes
             'formatter': 'verbose'
         },
     },
@@ -171,7 +181,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        # '': { 
+        # '': {
         #     'handlers': ['log_file'],
         #     'level': 'DEBUG',
         #     'propagate': True,

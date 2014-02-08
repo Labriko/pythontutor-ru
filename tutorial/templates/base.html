@@ -107,11 +107,11 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 {% block authentication %}
 
 {% if request.user.is_authenticated %}
-<div class="loggedUserLine">Вы вошли как <a href="{% url profile %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>.
-<a href="{% url logout %}">Выйти</a>
+<div class="loggedUserLine">Вы вошли как <a href="{% url 'profile' %}">{{ request.user.first_name }} {{ request.user.last_name }}</a>.
+<a href="{% url 'logout' %}">Выйти</a>
 </div>
 {% else %}
-<div class="loggedUserLine"><a href="{% url login %}">Войти</a> или <a href="{% url register %}">зарегистрироваться</a>
+<div class="loggedUserLine"><a href="{% url 'login' %}">Войти</a> или <a href="{% url 'register' %}">зарегистрироваться</a>
 </div>
 {% endif %}
 
@@ -121,14 +121,14 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
 
 
 <div class="navigationLine">
-<a href="{% url home %}">Главная страница</a>
+<a href="{% url 'home' %}">Главная страница</a>
 
 {% if navigation.course %}
     &nbsp;&nbsp;&gt;&nbsp;&nbsp;
     <!-- <a href="/courses/{{ course.urlname }}/"> -->{{ navigation.course.title }}<!-- </a> --> 
     {% if navigation.lesson %}
         &nbsp;&nbsp;&gt;&nbsp;&nbsp;
-        <a href="{% url courses %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a>
+        <a href="{% url 'courses' %}{{ navigation.course.urlname }}/lessons/{{ navigation.lesson.urlname }}/">{{ navigation.lesson.title }}</a>
     {% endif %}
 
     {% if navigation.problem %}
@@ -145,9 +145,9 @@ Syntax highlighter from http://google-code-prettify.googlecode.com/svn/trunk/REA
     <div class="container">
     <ul class="nav">
       {% if not navigation.course and not navigation.lesson %}
-      <li class="active"><a href="{% url home %}">Главная страница</a></li>
+      <li class="active"><a href="{% url 'home' %}">Главная страница</a></li>
       {% else %}
-      <li><a href="{% url home %}">Главная страница</a></li>
+      <li><a href="{% url 'home' %}">Главная страница</a></li>
       {% endif %}
       {% if navigation.course %}
       <li><a href="#" class="muted">{{ navigation.course.title }}</a></li>

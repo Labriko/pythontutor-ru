@@ -35,7 +35,7 @@
 # fail on Python 3.X).
 
 
-from code_conversion import (three_to_two, print__workaround, input__workaround, 
+from visualizer.code_conversion import (three_to_two, print__workaround, input__workaround, 
     config_workarounds, by_bytes, ceil__workaround, floor__workaround)
 
 
@@ -54,11 +54,12 @@ import re
 import traceback
 import copy
 
-import StringIO
-import cStringIO
-import pg_encoder
+import io
+StringIO = io.StringIO
+cStringIO = io.BytesIO
+import visualizer.pg_encoder
 
-from pylernu.errors.explain import get_error_explanation
+from errors.explain import get_error_explanation
 
 
 IGNORE_VARS = set(('__stdin__', '__stdout__', '__builtins__', '__name__', '__exception__', '__package__', 'input__workaround'))
@@ -268,9 +269,7 @@ class PGLogger(bdb.Bdb):
         user_builtins['ceil__workaround'] = ceil__workaround
         user_builtins['floor__workaround'] = floor__workaround
 
-        print 'creating user_stdin'
         user_stdin = StringIO.StringIO(input_data)
-        print 'user_stdin created'
 
         global user_stdout
 
@@ -294,15 +293,14 @@ class PGLogger(bdb.Bdb):
                        }
 
         try:
-          print >> true_stdout, 'run begins'
           self.run(script_str, user_globals, user_globals)
           sys.stdout = standard_stdout
-          print >> true_stdout, 'run is done'
+
           self.finalize(script_str)
         # sys.exit ...
         except InstructionLimitReached:
           sys.stdout = standard_stdout
-          print 'instruction limit reached'
+
           self.finalize(script_str)
         except:
           #traceback.print_exc() # uncomment this to see the REAL exception msg
@@ -310,9 +308,6 @@ class PGLogger(bdb.Bdb):
           trace_entry = dict(event='uncaught_exception')
 
           sys.stdout = standard_stdout
-
-          print 'Program caught an exception'
-          print repr(sys.exc_info()[1])
 
           exc = sys.exc_info()[1]
           if hasattr(exc, 'lineno'):
@@ -328,8 +323,6 @@ class PGLogger(bdb.Bdb):
 
           self.trace.append(trace_entry)
 
-          print 'going to finalize()'
-
           self.finalize(script_str)
           # sys.exit(0) 
           # need to forceably STOP execution
@@ -339,14 +332,6 @@ class PGLogger(bdb.Bdb):
 
 
     def finalize(self, script_str):
-      print 'enter finalize()'
-
-      print "stdout hadn't been renormalized"
-
-      #assert len(self.trace) <= (MAX_EXECUTED_LINES + 1)
-
-      print 'assertion about MAX_EXECUTED_LINES passed'
-
       # filter all entries after 'return' from '<module>', since they
       # seem extraneous:
       res = []
@@ -355,7 +340,6 @@ class PGLogger(bdb.Bdb):
         if e['event'] == 'return' and e['func_name'] == '<module>':
           break
 
-      print 'filter returns finished'
 
       # another hack: if the SECOND to last entry is an 'exception'
       # and the last entry is return from <module>, then axe the last
@@ -371,19 +355,13 @@ class PGLogger(bdb.Bdb):
 
       # somewhere here we should attach an information about errors
 
-      print 'about to attach_error_explanation()'
       self.attach_error_explanation(script_str)
-      print 'error explanation attached'
 
-      print 'about to obscure our python2 guts'
       self.obscure_python2_guts()
-      print 'python2 guts obscure'
 
-      print self.finalizer_func.__name__
 
       self.finalizer_func(self.trace)
 
-      print 'out of the finalizer function'
 
 
     def attach_error_explanation(self, script_str):
@@ -391,8 +369,6 @@ class PGLogger(bdb.Bdb):
       for d in self.trace:
         exception_msg = d.get('exception_msg', None)
         lineno = d.get('line', None)
-        print u'finding explanation to ' + unicode(script)
-        print u'exception_msg ' + unicode(exception_msg)
         if exception_msg:
           try:
             d['exception_msg'] = get_error_explanation(exception_msg, script[lineno - 1] if lineno else None)
@@ -422,22 +398,18 @@ class PGLogger(bdb.Bdb):
 
 # the MAIN meaty function!!!
 def exec_script_str(script_str, input_data, finalizer_func, ignore_id=False):
-  print 'about to translate code into python2'
   script_str = three_to_two(script_str)
-  print 'mangled code:\n{0}\n'.format(script_str.encode('ascii', 'replace'))
   print('version: 13:40')
   # print 'input by bytes:\n{0}\n'.format(by_bytes(input_data))
   logger = PGLogger(finalizer_func, ignore_id)
   input_data = unicode(input_data)
   logger._runscript(script_str, input_data)
 
-  print 'end of exec_script_str'
 
 def exec_file_and_pretty_print(mainpyfile, input_data_file):
   import pprint
 
   if not os.path.exists(mainpyfile):
-    print 'Error:', mainpyfile, 'does not exist'
     sys.exit(1)
 
   def pretty_print(output_lst):
